@@ -12,12 +12,15 @@ import ExpenseFilters from "../components/expenses/ExpenseFilters";
 import ExpensePagination from "../components/expenses/ExpensePagination";
 import ExpenseForm from "../components/expenses/ExpenseForm";
 
-import { getExpenses } from "../services/expenseService";
+import {
+  getExpenses,
+  deleteExpense,
+} from "../services/expenseService";
+
+import { toast } from "sonner";
 
 function Expenses() {
-
   const [expenses, setExpenses] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
@@ -43,9 +46,7 @@ function Expenses() {
   }, [page, search, category, ordering]);
 
   const loadExpenses = async () => {
-
     try {
-
       setLoading(true);
 
       const data = await getExpenses({
@@ -62,25 +63,31 @@ function Expenses() {
         next: data.next,
         previous: data.previous,
       });
-
     } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const handleDelete = async (id) => {
+    try {
+      await deleteExpense(id);
+
+      toast.success("Expense deleted successfully.");
+
+      loadExpenses();
+    } catch (error) {
       console.error(error);
 
-    } finally {
-
-      setLoading(false);
-
+      toast.error("Unable to delete expense.");
     }
-
   };
-    return (
+
+  return (
     <DashboardLayout>
-
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-
         <div>
-
           <h1 className="text-3xl font-bold text-slate-900">
             Expenses
           </h1>
@@ -88,7 +95,6 @@ function Expenses() {
           <p className="text-slate-500 mt-1">
             Manage all your daily expenses
           </p>
-
         </div>
 
         <Button
@@ -98,19 +104,13 @@ function Expenses() {
             setOpenDialog(true);
           }}
         >
-
           <Plus className="mr-2 h-5 w-5" />
-
           Add Expense
-
         </Button>
-
       </div>
 
       <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-
         <div className="relative mb-6">
-
           <Search
             className="absolute left-3 top-3.5 text-slate-400"
             size={18}
@@ -125,7 +125,6 @@ function Expenses() {
               setSearch(e.target.value);
             }}
           />
-
         </div>
 
         <ExpenseFilters
@@ -137,8 +136,8 @@ function Expenses() {
           ordering={ordering}
           setOrdering={setOrdering}
         />
-
       </div>
+
       <ExpenseTable
         expenses={expenses}
         loading={loading}
@@ -146,6 +145,7 @@ function Expenses() {
           setSelectedExpense(expense);
           setOpenDialog(true);
         }}
+        onDelete={handleDelete}
       />
 
       <ExpensePagination
@@ -160,7 +160,6 @@ function Expenses() {
         expense={selectedExpense}
         refreshExpenses={loadExpenses}
       />
-
     </DashboardLayout>
   );
 }

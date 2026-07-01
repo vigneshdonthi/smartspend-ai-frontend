@@ -4,20 +4,34 @@ import {
 } from "@/components/ui/card";
 
 import {
-  Badge,
-} from "@/components/ui/badge";
+  Button,
+} from "@/components/ui/button";
 
 import {
   Pencil,
   Trash2,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-
 import DeleteDialog from "../common/DeleteDialog";
 
-function ExpenseTable({
-  expenses,
+const MONTHS = [
+  "",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+function BudgetTable({
+  budgets,
   loading,
   onEdit,
   onDelete,
@@ -26,17 +40,17 @@ function ExpenseTable({
     return (
       <Card className="rounded-2xl shadow-md">
         <CardContent className="py-20 text-center text-slate-500">
-          Loading expenses...
+          Loading budgets...
         </CardContent>
       </Card>
     );
   }
 
-  if (expenses.length === 0) {
+  if (budgets.length === 0) {
     return (
       <Card className="rounded-2xl shadow-md">
         <CardContent className="py-20 text-center text-slate-500">
-          No expenses found.
+          No budgets found.
         </CardContent>
       </Card>
     );
@@ -51,23 +65,15 @@ function ExpenseTable({
             <thead className="bg-slate-100">
               <tr>
                 <th className="text-left px-6 py-4">
-                  Item
+                  Month
                 </th>
 
                 <th className="text-left px-6 py-4">
-                  Category
-                </th>
-
-                <th className="text-left px-6 py-4">
-                  Date
+                  Year
                 </th>
 
                 <th className="text-right px-6 py-4">
-                  Amount
-                </th>
-
-                <th className="text-center px-6 py-4">
-                  Recurring
+                  Budget
                 </th>
 
                 <th className="text-center px-6 py-4">
@@ -77,49 +83,21 @@ function ExpenseTable({
             </thead>
 
             <tbody>
-              {expenses.map((expense) => (
+              {budgets.map((budget) => (
                 <tr
-                  key={expense.id}
+                  key={budget.id}
                   className="border-t hover:bg-slate-50 transition"
                 >
-                  <td className="px-6 py-5">
-                    <div>
-                      <h3 className="font-semibold">
-                        {expense.item}
-                      </h3>
-
-                      {expense.notes && (
-                        <p className="text-sm text-slate-500 mt-1">
-                          {expense.notes}
-                        </p>
-                      )}
-                    </div>
+                  <td className="px-6 py-5 font-medium">
+                    {MONTHS[budget.month]}
                   </td>
 
                   <td className="px-6 py-5">
-                    <Badge variant="secondary">
-                      {expense.category}
-                    </Badge>
-                  </td>
-
-                  <td className="px-6 py-5">
-                    {expense.date}
+                    {budget.year}
                   </td>
 
                   <td className="px-6 py-5 text-right font-semibold">
-                    ₹{Number(expense.amount).toLocaleString()}
-                  </td>
-
-                  <td className="px-6 py-5 text-center">
-                    {expense.is_recurring ? (
-                      <Badge>
-                        Yes
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline">
-                        No
-                      </Badge>
-                    )}
+                    ₹{Number(budget.budget).toLocaleString()}
                   </td>
 
                   <td className="px-6 py-5">
@@ -128,15 +106,15 @@ function ExpenseTable({
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() => onEdit(expense)}
+                        onClick={() => onEdit(budget)}
                       >
                         <Pencil size={18} />
                       </Button>
 
                       <DeleteDialog
-                        title="Delete Expense?"
+                        title="Delete Budget?"
                         description="This action cannot be undone."
-                        onDelete={() => onDelete(expense.id)}
+                        onDelete={() => onDelete(budget.id)}
                       >
                         <Button
                           variant="destructive"
@@ -159,4 +137,4 @@ function ExpenseTable({
   );
 }
 
-export default ExpenseTable;
+export default BudgetTable;

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { Eye, EyeOff, Wallet } from "lucide-react";
+import { toast } from "sonner";
 
 import useAuth from "../hooks/useAuth";
 
@@ -38,7 +39,7 @@ function Login() {
 
       navigate("/dashboard");
     } catch (error) {
-      alert(
+      toast.error(
         error.response?.data?.error || "Login failed"
       );
     } finally {
@@ -47,83 +48,119 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 flex items-center justify-center p-6">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 flex items-center justify-center p-6">
 
-      <div className="w-full max-w-md rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl p-8">
+      {/* Background Glow */}
+      <div className="absolute -top-28 -left-28 w-96 h-96 rounded-full bg-blue-600/20 blur-3xl"></div>
 
-        <div className="flex flex-col items-center mb-8">
+      <div className="absolute -bottom-32 -right-28 w-[30rem] h-[30rem] rounded-full bg-indigo-600/20 blur-3xl"></div>
 
-          <div className="bg-blue-600 p-4 rounded-full mb-4">
-            <Wallet className="text-white w-8 h-8" />
+      <div className="absolute top-1/2 left-1/2 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+
+      {/* Login Card */}
+
+      <div className="relative z-10 w-full max-w-md rounded-3xl bg-white/10 backdrop-blur-2xl border border-white/10 shadow-2xl p-10">
+
+        <div className="flex flex-col items-center">
+
+          <div className="mb-5 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-1 text-xs font-semibold tracking-widest uppercase text-blue-300">
+            AI Powered Personal Finance
           </div>
 
-          <h1 className="text-3xl font-bold text-white">
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-5 rounded-full shadow-xl mb-6">
+
+            <Wallet className="w-10 h-10 text-white" />
+
+          </div>
+
+          <p className="text-blue-300 text-sm uppercase tracking-[0.25em]">
+
+            Welcome Back
+
+          </p>
+
+          <h1 className="mt-2 text-4xl font-extrabold text-white">
+
             SmartSpend AI
+
           </h1>
 
-          <p className="text-slate-300 mt-2">
-            Welcome Back
+          <p className="mt-3 text-center text-slate-300 leading-6">
+
+            Sign in to continue managing your finances
+            with AI-powered insights.
+
           </p>
 
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-5"
+          className="mt-8 space-y-5"
         >
 
           <Input
-            placeholder="Username"
             name="username"
+            placeholder="Username"
             value={formData.username}
             onChange={handleChange}
+            className="h-12 rounded-xl border-white/20 bg-white/5 text-white placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-blue-500"
           />
 
           <div className="relative">
 
             <Input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
               name="password"
+              placeholder="Password"
               value={formData.password}
               onChange={handleChange}
+              className="h-12 rounded-xl border-white/20 bg-white/5 text-white placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-blue-500 pr-12"
             />
 
             <button
               type="button"
-              className="absolute right-3 top-3"
-              onClick={() =>
-                setShowPassword(!showPassword)
-              }
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-3.5 text-slate-400 hover:text-white transition"
             >
               {showPassword ? (
-                <EyeOff size={18} />
+                <EyeOff size={20} />
               ) : (
-                <Eye size={18} />
+                <Eye size={20} />
               )}
             </button>
 
           </div>
 
           <Button
-            className="w-full"
+            className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-base font-semibold"
             disabled={loading}
           >
-            {loading ? "Signing In..." : "Login"}
+
+            {loading ? "Signing In..." : "Sign In"}
+
           </Button>
 
         </form>
 
-        <p className="text-center text-slate-300 mt-6">
+        <p className="text-center text-slate-300 mt-8">
 
-          Don't have an account?
+          New to SmartSpend AI?
 
           <Link
-            className="text-blue-400 ml-2"
             to="/register"
+            className="ml-2 font-semibold text-blue-400 hover:text-blue-300 transition"
           >
-            Register
+
+            Create Account
+
           </Link>
+
+        </p>
+
+        <p className="mt-8 text-center text-xs text-slate-500">
+
+          © 2026 SmartSpend AI • Personal Finance Assistant
 
         </p>
 

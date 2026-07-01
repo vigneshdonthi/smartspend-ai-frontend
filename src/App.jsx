@@ -10,7 +10,8 @@ import AIInsights from "./pages/AIInsights";
 import NotFound from "./pages/NotFound";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
-
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 function App() {
   return (
     <Routes>
@@ -61,7 +62,23 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>
 
+<Route
+  path="/settings"
+  element={
+    <ProtectedRoute>
+      <Settings />
+    </ProtectedRoute>
+  }
+/>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

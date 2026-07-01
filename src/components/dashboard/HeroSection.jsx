@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Plus, Wallet } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 import useAuth from "../../hooks/useAuth";
 
 function HeroSection({ dashboard }) {
   const { user } = useAuth();
+
+  const navigate = useNavigate();
 
   const hour = new Date().getHours();
 
@@ -21,7 +25,6 @@ function HeroSection({ dashboard }) {
 
   return (
     <section className="mb-8">
-
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 p-8 shadow-xl">
 
         <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-white/10 blur-3xl"></div>
@@ -32,15 +35,16 @@ function HeroSection({ dashboard }) {
 
           <div>
 
-            <p className="text-blue-100 text-lg font-medium">
+            <p className="text-blue-100 text-base font-semibold">
               {greeting}
             </p>
 
-            <h1 className="mt-2 text-5xl font-extrabold tracking-tight text-white">
+            <h1 className="mt-3 text-5xl font-bold text-white flex items-center gap-2">
               {user?.full_name || user?.username}
             </h1>
+            
 
-            <p className="mt-4 max-w-xl text-blue-100 text-lg leading-relaxed">
+            <p className="mt-5 max-w-2xl text-blue-100 text-base leading-8">
               Welcome to your financial dashboard for{" "}
               <span className="font-semibold text-white">
                 {monthName} {dashboard.year}
@@ -56,7 +60,10 @@ function HeroSection({ dashboard }) {
 
               <div className="flex items-center gap-3">
 
-                <Wallet className="text-white" size={28} />
+                <Wallet
+                  className="text-white"
+                  size={28}
+                />
 
                 <div>
 
@@ -76,9 +83,11 @@ function HeroSection({ dashboard }) {
 
             <Button
               size="lg"
+              onClick={() => navigate("/expenses")}
               className="rounded-xl bg-white text-blue-700 hover:bg-slate-100 font-semibold shadow-lg"
             >
               <Plus className="mr-2 h-5 w-5" />
+
               Add Expense
             </Button>
 
@@ -87,7 +96,6 @@ function HeroSection({ dashboard }) {
         </div>
 
       </div>
-
     </section>
   );
 }

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { toast } from "sonner";
 import {
   createExpense,
   updateExpense,
@@ -146,7 +146,7 @@ function ExpenseForm({
     } catch (error) {
       console.error(error);
 
-      alert(
+      toast.error(
         error.response?.data?.error ||
         "Something went wrong."
       );

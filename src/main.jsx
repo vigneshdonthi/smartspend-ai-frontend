@@ -7,15 +7,26 @@ import "./index.css";
 
 import { AuthProvider } from "./context/AuthContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "./components/common/ThemeProvider";
+
+import { Toaster } from "sonner";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <TooltipProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </TooltipProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <AuthProvider>
+            <App />
+
+            <Toaster
+              richColors
+              position="top-right"
+              closeButton
+            />
+          </AuthProvider>
+        </TooltipProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

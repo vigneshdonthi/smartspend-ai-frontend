@@ -15,7 +15,6 @@ function Dashboard() {
   const [dashboard, setDashboard] = useState(null);
   const [monthlyData, setMonthlyData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,12 +29,13 @@ function Dashboard() {
       setMonthlyData(data.monthlyData);
       setCategoryData(data.categoryData);
     } catch (error) {
-      console.error(error);
+      console.error("Dashboard Error:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  // Loading State
   if (loading) {
     return (
       <DashboardLayout>
@@ -48,25 +48,34 @@ function Dashboard() {
     );
   }
 
+  // Prevent crash when dashboard is null
+  if (!dashboard) {
+    return (
+      <DashboardLayout>
+        <div className="flex justify-center items-center h-[70vh]">
+          <p className="text-slate-500 text-lg">
+            Redirecting...
+          </p>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
-
       <HeroSection dashboard={dashboard} />
 
       <SummaryCards dashboard={dashboard} />
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
-
         <div className="xl:col-span-2">
           <ExpenseBarChart data={monthlyData} />
         </div>
 
         <CategoryPieChart data={categoryData} />
-
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
         <div className="xl:col-span-2">
           <RecentExpenses
             expenses={dashboard.recent_expenses}
@@ -74,9 +83,7 @@ function Dashboard() {
         </div>
 
         <AIInsightsCard dashboard={dashboard} />
-
       </div>
-
     </DashboardLayout>
   );
 }

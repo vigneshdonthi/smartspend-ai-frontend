@@ -4,7 +4,6 @@ import {
   PiggyBank,
   FileText,
   Bot,
-  LogOut,
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -37,24 +36,32 @@ const menus = [
   },
 ];
 
-function Sidebar() {
+function Sidebar({ open }) {
   return (
-    <aside className="w-72 bg-slate-950 text-white flex flex-col">
-
+    <aside
+      className={`bg-slate-950 text-white flex flex-col transition-all duration-300 ${
+        open ? "w-72" : "w-20"
+      }`}
+    >
       <div className="p-6 border-b border-slate-800">
+        {open ? (
+          <>
+            <h1 className="text-2xl font-bold text-blue-500">
+              SmartSpend AI
+            </h1>
 
-        <h1 className="text-2xl font-bold text-blue-500">
-          SmartSpend AI
-        </h1>
-
-        <p className="text-slate-400 text-sm mt-1">
-          Personal Finance
-        </p>
-
+            <p className="text-slate-400 text-sm mt-1">
+              Personal Finance
+            </p>
+          </>
+        ) : (
+          <h1 className="text-2xl font-bold text-blue-500 text-center">
+            S
+          </h1>
+        )}
       </div>
 
       <nav className="flex-1 p-4 space-y-2">
-
         {menus.map((menu) => {
           const Icon = menu.icon;
 
@@ -63,33 +70,28 @@ function Sidebar() {
               key={menu.path}
               to={menu.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
+                `flex items-center rounded-xl transition-all ${
+                  open
+                    ? "gap-3 px-4 py-3"
+                    : "justify-center px-0 py-3"
+                } ${
                   isActive
                     ? "bg-blue-600 text-white"
-                    : "hover:bg-slate-800 text-slate-300"
+                    : "text-slate-300 hover:bg-slate-800"
                 }`
               }
             >
-              <Icon size={20} />
+              <Icon className="h-5 w-5 flex-shrink-0" />
 
-              {menu.title}
+              {open && (
+                <span className="font-medium">
+                  {menu.title}
+                </span>
+              )}
             </NavLink>
           );
         })}
-
       </nav>
-
-      <div className="p-4 border-t border-slate-800">
-
-        <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 hover:bg-red-600 transition">
-
-          <LogOut size={20} />
-
-          Logout
-
-        </button>
-
-      </div>
     </aside>
   );
 }

@@ -7,7 +7,11 @@ import {
 
 import { Sparkles } from "lucide-react";
 
+import { useNavigate } from "react-router-dom";
+
 function AIInsightsCard({ dashboard }) {
+  const navigate = useNavigate();
+
   let title = "You're doing great!";
   let message =
     "Keep tracking your expenses consistently.";
@@ -34,9 +38,7 @@ function AIInsightsCard({ dashboard }) {
         <div className="flex items-center gap-3">
 
           <div className="p-3 rounded-xl bg-white/20">
-
             <Sparkles size={22} />
-
           </div>
 
           <div>
@@ -74,38 +76,28 @@ function AIInsightsCard({ dashboard }) {
           <div className="rounded-xl bg-white/15 p-4">
 
             <div className="flex justify-between">
-
               <span>Budget Used</span>
-
-              <strong>
-                {dashboard.percentage_used}%
-              </strong>
-
+              <strong>{dashboard.percentage_used}%</strong>
             </div>
 
             <div className="flex justify-between mt-3">
-
               <span>Transactions</span>
-
-              <strong>
-                {dashboard.total_transactions}
-              </strong>
-
+              <strong>{dashboard.total_transactions}</strong>
             </div>
 
             <div className="flex justify-between mt-3">
-
               <span>Remaining</span>
-
               <strong>
                 ₹{Number(dashboard.remaining).toLocaleString()}
               </strong>
-
             </div>
 
           </div>
 
-          <button className="w-full rounded-xl bg-white text-blue-700 font-semibold py-3 hover:bg-slate-100 transition">
+          <button
+            onClick={() => navigate("/ai-insights")}
+            className="w-full rounded-xl bg-white text-blue-700 font-semibold py-3 hover:bg-slate-100 transition"
+          >
             View Full Analysis
           </button>
 

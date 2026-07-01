@@ -1,46 +1,56 @@
-import { Bell, Moon, Search } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import {
+  Menu,
+  ChevronDown,
+  User,
+  LogOut,
+} from "lucide-react";
+
 import useAuth from "../../hooks/useAuth";
 
-function Navbar() {
-  const { user } = useAuth();
+function Navbar({ sidebarOpen, setSidebarOpen }) {
+  const navigate = useNavigate();
+
+  const { user, logout } = useAuth();
+
+  const [openProfile, setOpenProfile] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8">
 
-      {/* Search */}
-      <div className="relative w-96">
-        <Search
-          size={18}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-        />
+      {/* Left Side */}
+      <div className="flex items-center">
 
-        <input
-          type="text"
-          placeholder="Search expenses..."
-          className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 outline-none focus:border-blue-500"
-        />
+        <button
+          onClick={() => setSidebarOpen((prev) => !prev)}
+          className="p-2 rounded-lg hover:bg-slate-100 transition"
+        >
+          <Menu size={22} />
+        </button>
+
       </div>
 
       {/* Right Side */}
-      <div className="flex items-center gap-6">
+      <div className="relative">
 
-        <Bell
-          className="cursor-pointer text-slate-600 hover:text-blue-600"
-          size={22}
-        />
+        <button
+          onClick={() => setOpenProfile(!openProfile)}
+          className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-slate-100 transition"
+        >
 
-        <Moon
-          className="cursor-pointer text-slate-600 hover:text-blue-600"
-          size={22}
-        />
-
-        <div className="flex items-center gap-3">
-
-          <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg">
+          <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
             {user?.username?.charAt(0).toUpperCase()}
           </div>
 
-          <div className="hidden md:block">
+          <div className="hidden md:block text-left">
+
             <h4 className="font-semibold">
               {user?.full_name || user?.username}
             </h4>
@@ -48,11 +58,50 @@ function Navbar() {
             <p className="text-xs text-slate-500">
               Personal Account
             </p>
+
           </div>
 
-        </div>
+          <ChevronDown size={18} />
+
+        </button>
+
+        {openProfile && (
+
+          <div className="absolute right-0 mt-3 w-56 rounded-xl border bg-white shadow-xl z-50 overflow-hidden">
+
+            <button
+              onClick={() => {
+                navigate("/profile");
+                setOpenProfile(false);
+              }}
+              className="flex items-center gap-3 w-full px-4 py-3 hover:bg-slate-100 transition"
+            >
+
+              <User size={18} />
+
+              My Profile
+
+            </button>
+
+            <hr />
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 transition"
+            >
+
+              <LogOut size={18} />
+
+              Logout
+
+            </button>
+
+          </div>
+
+        )}
 
       </div>
+
     </header>
   );
 }
