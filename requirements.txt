@@ -1,0 +1,3 @@
+# Frontend dependencies for SmartSpend AI
+# This project uses Node.js package management via package.json
+# Install with: npm install
